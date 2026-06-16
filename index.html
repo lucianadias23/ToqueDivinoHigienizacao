@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toque Divino Higienização</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&family=Playfair+Display:wght@400;600;700&family=Allura&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+        <a href="#inicio" class="logo">
+            <img src="img/logo.png" alt="Toque Divino Higienização">
+        </a>
+
+        <ul class="menu">
+            <li><a href="#inicio" class="ativo">Início</a></li>
+            <li><a href="#quem-somos">Quem somos?</a></li>
+            <li><a href="#servicos">Nossos Serviços</a></li>
+            <li><a href="#videos">Vídeos</a></li>
+            <li><a href="#redes">Redes Sociais</a></li>
+        </ul>
+
+        <div class="menu-mobile" onclick="abrirMenu()">☰</div>
+
+        <button class="btn-orcamento-menu" onclick="abrirModal()">
+            Solicitar orçamento
+        </button>
+    </nav>
+</header>
+
+<section id="inicio" class="hero-novo">
+    <div class="hero-texto">
+        <p class="hero-etiqueta">Limpeza • Higienização • Impermeabilização</p>
+
+        <h1>Cuidamos do seu lar como cuidamos do nosso.</h1>
+
+        <p class="hero-subtitulo">
+            Higienização profissional de estofados, tapetes, carpetes e persianas
+            com o cuidado que você e sua família merece.
+        </p>
+
+        <button class="btn-hero" onclick="abrirModal()">
+            Solicitar avaliação gratuita
+        </button>
+    </div>
+
+    <div class="hero-imagem">
+        <img src="img/Logo2.png" alt="Toque Divino Higienização">
+    </div>
+</section>
+
+<section class="beneficios">
+    <div class="beneficio-card">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+            <h3>Higienização profunda</h3>
+            <p>Eliminamos ácaros, bactérias e odores indesejados.</p>
+        </div>
+    </div>
+
+    <div class="beneficio-card">
+        <i class="fa-solid fa-leaf"></i>
+        <div>
+            <h3>Produtos seguros</h3>
+            <p>Eficazes e não prejudiciais à saúde da sua família.</p>
+        </div>
+    </div>
+
+    <div class="beneficio-card">
+        <i class="fa-solid fa-house"></i>
+        <div>
+            <h3>Atendimento em domicílio</h3>
+            <p>Mais comodidade e praticidade para você.</p>
+        </div>
+    </div>
+
+    <div class="beneficio-card">
+       <div class="beneficio-card beneficio-avaliacoes">
+    <i class="fa-solid fa-star"></i>
+
+    <div>
+        <h3>Avaliações dos clientes</h3>
+
+        <div class="estrelas-google">
+            ⭐⭐⭐⭐⭐
+        </div>
+
+        <a
+            href="https://maps.app.goo.gl/fDjtaHeZBuj5QLrg8"
+            target="_blank"
+            class="btn-avaliacoes">
+            Ver avaliações dos clientes
+        </a>
+    </div>
+
+
+
+    
+</section>
+
+
+
+<section class="quem-somos-premium" id="quem-somos">
+    <div class="quem-img">
+        <img src="img/quem_somos.png" alt="Toque Divino">
+    </div>
+
+    <div class="quem-centro">
+        <span class="etiqueta">QUEM SOMOS</span>
+
+        <h3>
+            Família, fé e trabalho
+            <span>com propósito.</span>
+        </h3>
+
+        <p>
+            Cuidamos do seu lar com dedicação, respeito e excelência.
+            Nossa missão é oferecer um serviço de higienização que
+            transforme ambientes e proporcione mais conforto para sua família.
+        </p>
+
+        <p>
+            Trabalhamos com seriedade, atenção aos detalhes e compromisso
+            com cada atendimento realizado.
+        </p>
+
+        <div class="assinatura">Adriano e Rafaela</div>
+    </div>
+
+    <div class="quem-valores">
+        <div class="valor">
+            <i class="fa-solid fa-hands-praying"></i>
+            <div>
+                <h3>Deus é nossa base</h3>
+                <p>Trabalhamos com fé, honestidade e gratidão.</p>
+            </div>
+        </div>
+
+        <div class="valor">
+            <i class="fa-regular fa-heart"></i>
+            <div>
+                <h3>Atendimento com amor</h3>
+                <p>Tratamos cada cliente com atenção e respeito.</p>
+            </div>
+        </div>
+
+        <div class="valor">
+            <i class="fa-solid fa-star"></i>
+            <div>
+                <h3>Excelência</h3>
+                <p>Buscamos sempre os melhores resultados.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="servicos" id="servicos">
+    <p class="secao-etiqueta">Nossos serviços</p>
+
+    <h2>Ambiente limpo e saudável: Sua casa renovada</h2>
+
+    <p class="descricao-servicos">
+        Soluções completas em limpeza e conservação para trazer mais saúde,
+        beleza e bem-estar ao seu ambiente.
+    </p>
+
+    <div class="servicos-grid">
+        <div class="card-servico">
+            <div class="servico-icone">🛋️</div>
+            <div>
+                <h3>Sofás</h3>
+                <p>Remoção profunda de ácaros, manchas e impurezas, devolvendo o aspecto de novo ao seu estofado.</p>
+            </div>
+        </div>
+
+        <div class="card-servico">
+            <div class="servico-icone">🪑</div>
+            <div>
+                <h3>Cadeiras e Poltronas</h3>
+                <p>Higienização detalhada para renovar o conforto de ambientes residenciais ou corporativos.</p>
+            </div>
+        </div>
+
+        <div class="card-servico">
+            <div class="servico-icone">🧼</div>
+            <div>
+                <h3>Tapetes e Carpetes</h3>
+                <p>Remoção de poeira e impurezas acumuladas nas fibras, devolvendo cores e maciez.</p>
+            </div>
+        </div>
+
+        <div class="card-servico">
+            <div class="servico-icone">🪟</div>
+            <div>
+                <h3>Persianas</h3>
+                <p>Lavagem especializada para remover poeira sem danificar a estrutura.</p>
+            </div>
+        </div>
+
+        <div class="card-servico">
+            <div class="servico-icone">💧</div>
+            <div>
+                <h3>Impermeabilização</h3>
+                <p>Proteção contra líquidos e sujeiras secas, prolongando a vida útil.</p>
+            </div>
+        </div>
+
+        <div class="card-servico">
+            <div class="servico-icone">🛏️</div>
+            <div>
+                <h3>Colchões</h3>
+                <p>Higienização profunda para noites de sono mais saudáveis.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="servicos-faixa">
+        🚚 Atendimento no conforto do seu lar: Levamos toda a estrutura até você.
+    </div>
+</section>
+
+<section class="videos" id="videos">
+    <p class="secao-etiqueta">Vídeos</p>
+
+    <h2>Veja alguns resultados dos nossos serviços</h2>
+
+    <p class="videos-descricao">
+        Acompanhe na prática como realizamos a higienização profissional de estofados,
+        colchões, poltronas e cadeiras.
+    </p>
+
+    <div class="videos-grid">
+        <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/oq95Enx8ig4" title="Higienização de colchão" allowfullscreen></iframe>
+            <h3>Higienização de colchão</h3>
+        </div>
+
+        <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/rI5VBk1x4iY" title="Antes e depois cadeiras" allowfullscreen></iframe>
+            <h3>Antes e depois</h3>
+        </div>
+
+        <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/bI8cF2AhKOk" title="Impermeabilização" allowfullscreen></iframe>
+            <h3>Impermeabilização cria uma camada invisível que protege o tecido</h3>
+        </div>
+
+        <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/ZLoYbmO3MIg" title="Higienização automotiva" allowfullscreen></iframe>
+            <h3>Higienização automotiva</h3>
+        </div>
+    </div>
+</section>
+
+<footer id="redes">
+    <div class="footer-imagem"></div>
+
+    <div class="footer-conteudo">
+        <div class="footer-coluna">
+            <img src="img/logo.png" alt="Toque Divino Higienização" class="footer-logo">
+            <p class="texto-descricao">
+                Higienização profissional de estofados, colchões, tapetes e persianas.
+            </p>
+        </div>
+
+        <div class="footer-coluna">
+            <h3>Contato</h3>
+
+            <div class="linha-contato">
+                <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Alfinete" class="img-icone">
+                <span class="texto-contato">Ferraz de Vasconcelos e região</span>
+            </div>
+
+            <div class="linha-contato">
+                <span class="emoji-tel">📞</span>
+                <span class="texto-contato">(11) 91530-0607</span>
+            </div>
+        </div>
+
+        <div class="footer-coluna">
+            <h3>Redes sociais</h3>
+
+            <div class="redes-sociais">
+                <a href="https://www.instagram.com/toque.divino.higienizacao/" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+
+                <a href="https://www.facebook.com/people/Toque-Divino-Higieniza%C3%A7%C3%A3o/100094264868719/#" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-copy">
+        &copy; 2026 Toque Divino Higienização. Todos os direitos reservados.
+    </div>
+</footer>
+
+<div id="modal" class="modal">
+    <div class="modal-conteudo">
+        <span class="fechar" onclick="fecharModal()">&times;</span>
+
+        <h2>Solicitar Orçamento</h2>
+
+        <form id="formOrcamento" enctype="multipart/form-data">
+            <input type="text" placeholder="Seu nome" name="nome" required>
+            <input type="text" placeholder="Telefone" name="telefone" required>
+            <input type="email" placeholder="E-mail" name="email" required>
+
+            <input type="text" id="cep" placeholder="CEP" name="cep" required maxlength="9">
+            <input type="text" id="logradouro" placeholder="Rua / Avenida" name="logradouro" readonly>
+            <input type="text" id="bairro" placeholder="Bairro" name="bairro" readonly>
+            <input type="text" id="cidade" placeholder="Cidade" name="cidade" readonly>
+            <input type="text" id="estado" placeholder="Estado" name="estado" readonly>
+            <input type="text" id="numero" placeholder="Número" name="numero" required>
+
+            <textarea id="descricao" name="descricao" placeholder="Descreva o serviço" required></textarea>
+
+            <input type="file" id="fotos" name="fotos" accept="image/*" multiple>
+
+            <small style="display:block; margin-top:5px; color:#666;">
+                Envie até 5 fotos para facilitar a avaliação do orçamento.
+            </small>
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>
+
+<button class="orcamento-flutuante" onclick="abrirModal()" aria-label="Solicitar orçamento">
+    <i class="fas fa-file-signature"></i>
+</button>
+
+<script src="script.js"></script>
+
+<script>
+function abrirModal(){
+    document.getElementById("modal").style.display = "flex";
+}
+
+function fecharModal(){
+    document.getElementById("modal").style.display = "none";
+}
+
+function abrirMenu(){
+    document.querySelector(".menu").classList.toggle("ativo");
+}
+</script>
+
+</body>
+</html>
