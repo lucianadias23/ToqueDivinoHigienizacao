@@ -144,7 +144,7 @@ window.filtrarStatus = function (status) {
 
 async function carregarPedidos() {
   try {
-    const resposta = await fetch("http://localhost:3000/orcamentos");
+    const resposta = await fetch("https://toquedivinohigienizacao.onrender.com/orcamentos");
     todosPedidos = await resposta.json();
 
     atualizarContadores(todosPedidos);
@@ -156,11 +156,10 @@ async function carregarPedidos() {
       "<p>Erro ao carregar pedidos.</p>";
   }
 }
-
 window.alterarStatus = async function (id, status) {
   try {
     const resposta = await fetch(
-      `http://localhost:3000/orcamentos/${id}/status`,
+      `https://toquedivinohigienizacao.onrender.com/orcamentos/${id}/status`,
       {
         method: "PUT",
         headers: {
@@ -191,9 +190,12 @@ window.excluirPedido = async function (id) {
   if (!confirmar) return;
 
   try {
-    const resposta = await fetch(`https://toquedivinohigienizacao.onrender.com`, {
-      method: "DELETE"
-    });
+    const resposta = await fetch(
+      `https://toquedivinohigienizacao.onrender.com/orcamentos/${id}`,
+      {
+        method: "DELETE"
+      }
+    );
 
     const dados = await resposta.json();
 
@@ -209,30 +211,3 @@ window.excluirPedido = async function (id) {
     alert("Erro ao excluir pedido.");
   }
 };
-
-const campoBusca = document.getElementById("campoBusca");
-
-if (campoBusca) {
-  campoBusca.addEventListener("input", function () {
-    const texto = this.value.toLowerCase();
-
-    const pedidosFiltrados = todosPedidos.filter(pedido =>
-      (pedido.nome || "").toLowerCase().includes(texto) ||
-      (pedido.telefone || "").toLowerCase().includes(texto) ||
-      (pedido.email || "").toLowerCase().includes(texto)
-    );
-
-    montarCards(pedidosFiltrados);
-  });
-}
-
-carregarPedidos();
-
-const btnSair = document.getElementById("btnSair");
-
-if (btnSair) {
-    btnSair.addEventListener("click", () => {
-        localStorage.removeItem("adminLogado");
-        window.location.href = "login.html";
-    });
-}

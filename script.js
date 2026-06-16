@@ -26,10 +26,13 @@ if (formOrcamento) {
     botao.innerText = "Enviando...";
 
     try {
-      const resposta = await fetch("https://toquedivinohigienizacao.onrender.com", {
-        method: "POST",
-        body: formData
-      });
+      const resposta = await fetch(
+  "https://toquedivinohigienizacao.onrender.com/enviar",
+  {
+    method: "POST",
+    body: formData
+  }
+);
 
       const dados = await resposta.json();
 
