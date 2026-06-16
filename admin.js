@@ -211,3 +211,30 @@ window.excluirPedido = async function (id) {
     alert("Erro ao excluir pedido.");
   }
 };
+
+const campoBusca = document.getElementById("campoBusca");
+
+if (campoBusca) {
+  campoBusca.addEventListener("input", function () {
+    const texto = this.value.toLowerCase();
+
+    const pedidosFiltrados = todosPedidos.filter(pedido =>
+      (pedido.nome || "").toLowerCase().includes(texto) ||
+      (pedido.telefone || "").toLowerCase().includes(texto) ||
+      (pedido.email || "").toLowerCase().includes(texto)
+    );
+
+    montarCards(pedidosFiltrados);
+  });
+}
+
+carregarPedidos();
+
+const btnSair = document.getElementById("btnSair");
+
+if (btnSair) {
+  btnSair.addEventListener("click", () => {
+    localStorage.removeItem("adminLogado");
+    window.location.href = "login.html";
+  });
+}
