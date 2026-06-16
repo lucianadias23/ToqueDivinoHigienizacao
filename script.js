@@ -26,7 +26,7 @@ if (formOrcamento) {
     botao.innerText = "Enviando...";
 
     try {
-      const resposta = await fetch("http://localhost:3000/enviar", {
+      const resposta = await fetch("https://toquedivinohigienizacao.onrender.com", {
         method: "POST",
         body: formData
       });

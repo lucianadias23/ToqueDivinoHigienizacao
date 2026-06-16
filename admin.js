@@ -191,7 +191,7 @@ window.excluirPedido = async function (id) {
   if (!confirmar) return;
 
   try {
-    const resposta = await fetch(`http://localhost:3000/orcamentos/${id}`, {
+    const resposta = await fetch(`https://toquedivinohigienizacao.onrender.com`, {
       method: "DELETE"
     });
 
