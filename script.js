@@ -56,8 +56,8 @@ Descrição: ${formData.get("descricao")}
       const linkWhatsApp =
         "https://wa.me/" + telefoneEmpresa + "?text=" + encodeURIComponent(mensagem);
 
-      alert("Orçamento enviado com sucesso!");
-
+      alert("Orçamento enviado com sucesso, aguarde o nosso retorno, será um prazer atendê-lo!");
+      window.open(linkWhatsApp, "_blank");
       form.reset();
 
       if (typeof fecharModal === "function") {
@@ -68,10 +68,6 @@ Descrição: ${formData.get("descricao")}
     document.querySelector(".menu").classList.toggle("ativo");
       }
 
-     
-      setTimeout(() => {
-        window.open(linkWhatsApp, "_blank");
-      }, 300);
 
     } catch (erro) {
       console.error("Erro no envio:", erro);
