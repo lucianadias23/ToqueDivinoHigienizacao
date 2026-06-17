@@ -231,6 +231,26 @@ header{
     margin:0;
 }
 
+.beneficio-icone{
+    width:60px;
+    height:60px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:#0b7895;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+
+.beneficios-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:25px;
+}
+
 /* QUEM SOMOS */
 .quem-somos-premium{
     max-width:1080px;
