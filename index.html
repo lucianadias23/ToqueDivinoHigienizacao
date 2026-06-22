@@ -25,6 +25,7 @@
             <li><a href="#servicos">Nossos Serviços</a></li>
             <li><a href="#videos">Vídeos</a></li>
             <li><a href="#redes">Redes Sociais</a></li>
+          
         </ul>
 
         <div class="menu-mobile" onclick="abrirMenu()">☰</div>
@@ -362,6 +363,34 @@ function abrirMenu(){
     document.querySelector(".menu").classList.toggle("ativo");
 }
 </script>
+
+<div id="modalFoto" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  z-index:9999;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+">
+  <button onclick="fecharFoto()" style="
+    margin-bottom:20px;
+    padding:10px 20px;
+    cursor:pointer;
+  ">
+    ← Voltar
+  </button>
+
+  <img id="fotoAmpliada" style="
+    max-width:90%;
+    max-height:80%;
+    border-radius:10px;
+  ">
+</div>
 
 </body>
 </html>

@@ -42,14 +42,16 @@ function montarCards(pedidos) {
       ${pedido.fotos && pedido.fotos.length ? `
       <div class="galeria-fotos">
       ${pedido.fotos.map(foto => `
-      <a href="${foto}" target="_blank">
-      <img
-          src="${foto}"
-          alt="Foto do estofado"
-          width="120"
-          style="border-radius:8px; cursor:pointer; margin:5px;"
-        >
-      </a>
+      <a href="javascript:void(0)">
+     <a href="#" onclick="abrirFoto('${foto}'); return false;">
+     <img
+         src="${foto}"
+         alt="Foto do estofado"
+         width="120"
+         style="border-radius:8px; cursor:pointer; margin:5px;"
+         >
+          </a>
+
     `).join("")}
   </div>
 ` : ""}
@@ -237,4 +239,14 @@ if (btnSair) {
     localStorage.removeItem("adminLogado");
     window.location.href = "login.html";
   });
+}
+
+function abrirFoto(url) {
+  document.getElementById("fotoAmpliada").src = url;
+  document.getElementById("modalFoto").style.display = "flex";
+}
+
+function fecharFoto() {
+  document.getElementById("modalFoto").style.display = "none";
+  document.getElementById("fotoAmpliada").src = "";
 }

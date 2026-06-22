@@ -25,6 +25,42 @@
     Sair
 </button>
 
+<div id="modalFoto" style="
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(248,243,236,0.95);
+  z-index:9999;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+">
+  <button onclick="fecharFoto()" style="
+  margin-bottom:15px;
+  padding:10px 22px;
+  border:none;
+  border-radius:8px;
+  background:#0b7895;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+">
+  ← Voltar
+</button>
+
+  <img
+    id="fotoAmpliada"
+    style="
+      max-width:90%;
+      max-height:80%;
+      border-radius:10px;
+    "
+  >
+</div>
+
 
 </body>
 </html>
