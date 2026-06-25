@@ -23,6 +23,10 @@ cloudinary.config({
 
 // Modelo do orçamento
 const Orcamento = mongoose.model("Orcamento", {
+  protocolo: {
+    type: String,
+    unique: true
+  },
   nome: String,
   telefone: String,
   email: String,
@@ -76,7 +80,11 @@ app.post(
         }
       }
 
+      const quantidade = await Orcamento.countDocuments();
+      const protocolo = `TD${String(quantidade + 1).padStart(6, "0")}`;
+
       const novoOrcamento = new Orcamento({
+        protocolo: protocolo,
         nome: req.body.nome,
         telefone: req.body.telefone,
         email: req.body.email,
@@ -91,12 +99,16 @@ app.post(
         status: "Novo"
       });
 
+      console.log("Protocolo gerado:", protocolo);
+      console.log(novoOrcamento);
+
       await novoOrcamento.save();
 
-      res.json({
-        success: true,
-        mensagem: "Orçamento enviado com sucesso!"
-      });
+     res.json({
+     success: true,
+     mensagem: "VERSAO NOVA AGORA",
+     protocolo: protocolo
+    });
 
     } catch (err) {
       console.log("ERRO AO ENVIAR ORÇAMENTO:");

@@ -27,7 +27,7 @@ if (formOrcamento) {
 
     try {
       const resposta = await fetch(
-  "https://toquedivinohigienizacao.onrender.com/enviar",
+      "https://toquedivinohigienizacao.onrender.com/enviar",
   {
     method: "POST",
     body: formData
@@ -35,6 +35,10 @@ if (formOrcamento) {
 );
 
       const dados = await resposta.json();
+
+     
+
+      console.log("RESPOSTA DO BACKEND:", dados);
 
       if (!dados.success) {
         alert("Erro ao enviar: " + (dados.erro || "Erro desconhecido."));
@@ -56,7 +60,16 @@ Descrição: ${formData.get("descricao")}
       const linkWhatsApp =
         "https://wa.me/" + telefoneEmpresa + "?text=" + encodeURIComponent(mensagem);
 
-      alert("Orçamento enviado com sucesso, aguarde o nosso retorno, será um prazer atendê-lo!");
+        alert(
+        `Orçamento enviado com sucesso!
+
+        📋 Protocolo: ${dados.protocolo}
+
+        Guarde este número para acompanhar seu atendimento.
+
+        Aguarde o nosso retorno, será um prazer atendê-lo!`
+        );
+
       window.open(linkWhatsApp, "_blank");
       form.reset();
 
