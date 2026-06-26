@@ -1,9 +1,9 @@
 if (localStorage.getItem("adminLogado") !== "true") {
-    window.location.href = "login.html";
+  window.location.href = "login.html";
 }
 
-
 let todosPedidos = [];
+let statusAtual = "Todos";
 
 function classeStatus(status) {
   return status === "Novo" ? "status-novo" :
@@ -24,55 +24,39 @@ function montarCards(pedidos) {
   lista.innerHTML = pedidos.map(pedido => `
     <div class="pedido ${classeStatus(pedido.status)}">
 
+      <div class="pedido-topo">
+        <p><strong>📋 Protocolo:</strong> ${pedido.protocolo || "Sem protocolo"}</p>
+
+        <span class="status-resumo">
+          ${pedido.status || "Novo"}
+        </span>
+      </div>
+
       <h2>${pedido.nome || "Sem nome"}</h2>
 
-      <p class="data-pedido">
-        <strong>Recebido em:</strong>
-        ${pedido.criadoEm ? new Date(pedido.criadoEm).toLocaleString("pt-BR") : "Data não informada"}
-      </p>
+      <p><strong>📞 Telefone:</strong> ${pedido.telefone || "Não informado"}</p>
 
-      <p><strong>Telefone:</strong> ${pedido.telefone || ""}</p>
-      <p><strong>Email:</strong> ${pedido.email || ""}</p>
-      <p><strong>CEP:</strong> ${pedido.cep || ""}</p>
-      <p><strong>Endereço:</strong> ${pedido.logradouro || ""}, ${pedido.numero || ""}</p>
-      <p><strong>Bairro:</strong> ${pedido.bairro || ""}</p>
-      <p><strong>Cidade:</strong> ${pedido.cidade || ""} - ${pedido.estado || ""}</p>
-      <p><strong>Descrição:</strong> ${pedido.descricao || ""}</p>
+      <p><strong>📅 Data:</strong> ${
+        pedido.criadoEm 
+          ? new Date(pedido.criadoEm).toLocaleDateString("pt-BR") 
+          : "Sem data"
+      }</p>
 
-      ${pedido.fotos && pedido.fotos.length ? `
-      <div class="galeria-fotos">
-      ${pedido.fotos.map(foto => `
-      <a href="javascript:void(0)">
-     <a href="#" onclick="abrirFoto('${foto}'); return false;">
-     <img
-         src="${foto}"
-         alt="Foto do estofado"
-         width="120"
-         style="border-radius:8px; cursor:pointer; margin:5px;"
-         >
-          </a>
+      <div class="acoes-pedido">
 
-    `).join("")}
-  </div>
-` : ""}
+        <button class="btn-atendimento" onclick="abrirAtendimento('${pedido._id}')">
+          📁 Atendimento
+        </button>
 
-      <br><br>
+        <button class="btn-whatsapp" onclick="enviarWhatsApp('${pedido._id}')">
+          💬 Notificar Cliente
+        </button>
 
-      <label><strong>Status:</strong></label>
+        <button class="btn-excluir" onclick="excluirPedido('${pedido._id}')">
+          🗑 Excluir
+        </button>
 
-      <select onchange="alterarStatus('${pedido._id}', this.value)">
-        <option value="Novo" ${pedido.status === "Novo" ? "selected" : ""}>Novo</option>
-        <option value="Em análise" ${pedido.status === "Em análise" ? "selected" : ""}>Em análise</option>
-        <option value="Agendado" ${pedido.status === "Agendado" ? "selected" : ""}>Agendado</option>
-        <option value="Finalizado" ${pedido.status === "Finalizado" ? "selected" : ""}>Finalizado</option>
-        <option value="Cancelado" ${pedido.status === "Cancelado" ? "selected" : ""}>Cancelado</option>
-      </select>
-
-      <br><br>
-
-      <button onclick="excluirPedido('${pedido._id}')">
-        Excluir
-      </button>
+      </div>
 
     </div>
   `).join("");
@@ -123,25 +107,31 @@ function atualizarContadores(pedidos) {
   `;
 }
 
-window.filtrarStatus = function (status) {
+function aplicarFiltros() {
   const campoBusca = document.getElementById("campoBusca");
-  const textoBusca = campoBusca ? campoBusca.value.toLowerCase() : "";
+  const textoBusca = campoBusca ? campoBusca.value.trim().toLowerCase() : "";
 
   let pedidosFiltrados = todosPedidos;
 
-  if (status !== "Todos") {
-    pedidosFiltrados = pedidosFiltrados.filter(pedido => pedido.status === status);
+  if (statusAtual !== "Todos") {
+    pedidosFiltrados = pedidosFiltrados.filter(pedido => pedido.status === statusAtual);
   }
 
   if (textoBusca) {
     pedidosFiltrados = pedidosFiltrados.filter(pedido =>
       (pedido.nome || "").toLowerCase().includes(textoBusca) ||
       (pedido.telefone || "").toLowerCase().includes(textoBusca) ||
-      (pedido.email || "").toLowerCase().includes(textoBusca)
+      (pedido.email || "").toLowerCase().includes(textoBusca) ||
+      (pedido.protocolo || "").toLowerCase().includes(textoBusca)
     );
   }
 
   montarCards(pedidosFiltrados);
+}
+
+window.filtrarStatus = function (status) {
+  statusAtual = status;
+  aplicarFiltros();
 };
 
 async function carregarPedidos() {
@@ -150,7 +140,7 @@ async function carregarPedidos() {
     todosPedidos = await resposta.json();
 
     atualizarContadores(todosPedidos);
-    montarCards(todosPedidos);
+    aplicarFiltros();
 
   } catch (erro) {
     console.error("Erro no admin:", erro);
@@ -158,6 +148,7 @@ async function carregarPedidos() {
       "<p>Erro ao carregar pedidos.</p>";
   }
 }
+
 window.alterarStatus = async function (id, status) {
   try {
     const resposta = await fetch(
@@ -214,23 +205,184 @@ window.excluirPedido = async function (id) {
   }
 };
 
+window.enviarWhatsApp = function (id) {
+  const pedido = todosPedidos.find(p => p._id === id);
+
+  console.log(pedido);
+
+  if (!pedido) {
+    alert("Pedido não encontrado.");
+    return;
+  }
+
+  const telefone = (pedido.telefone || "").replace(/\D/g, "");
+  const nome = pedido.nome || "cliente";
+  const protocolo = pedido.protocolo || "Sem protocolo";
+  const status = pedido.status || "Novo";
+
+  let mensagem = "";
+
+  if (status === "Novo") {
+    mensagem = `Olá, ${nome}!
+
+Recebemos sua solicitação de orçamento.
+
+📋 Protocolo: ${protocolo}
+
+Em breve nossa equipe fará a análise e entrará em contato.
+
+Toque Divino Higienização`;
+  }
+
+  if (status === "Em análise") {
+    mensagem = `Olá, ${nome}!
+
+Seu orçamento ${protocolo} está em análise.
+
+Estamos avaliando as informações e fotos enviadas.
+
+Em breve retornaremos.
+
+Toque Divino Higienização`;
+  }
+
+  if (status === "Agendado") {
+    mensagem = `Olá, ${nome}!
+
+Seu atendimento referente ao protocolo ${protocolo} foi agendado.
+
+Nossa equipe entrará em contato para confirmar data e horário.
+
+Agradecemos a confiança!
+
+Toque Divino Higienização`;
+  }
+
+  if (status === "Finalizado") {
+    mensagem = `Olá, ${nome}!
+
+O serviço referente ao protocolo ${protocolo} foi concluído.
+
+Esperamos que tenha ficado satisfeito(a).
+
+Sua avaliação é muito importante para nós:
+https://maps.app.goo.gl/fDjtaHeZBuj5QLrg8
+
+Toque Divino Higienização`;
+  }
+
+  if (status === "Cancelado") {
+    mensagem = `Olá, ${nome}!
+
+O orçamento ${protocolo} foi cancelado.
+
+Caso deseje retomá-lo futuramente, estaremos à disposição.
+
+Toque Divino Higienização`;
+  }
+
+  const link = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(link, "_blank");
+};
+
+window.abrirFoto = function (url) {
+  const modalAtendimento = document.getElementById("modalAtendimento");
+  const modalFoto = document.getElementById("modalFoto");
+  const fotoAmpliada = document.getElementById("fotoAmpliada");
+
+  if (modalAtendimento) {
+    modalAtendimento.style.display = "none";
+  }
+
+  fotoAmpliada.src = url;
+  modalFoto.style.display = "flex";
+};
+
+
+window.fecharFoto = function () {
+  const modalAtendimento = document.getElementById("modalAtendimento");
+  const modalFoto = document.getElementById("modalFoto");
+  const fotoAmpliada = document.getElementById("fotoAmpliada");
+
+  modalFoto.style.display = "none";
+  fotoAmpliada.src = "";
+
+  if (modalAtendimento) {
+    modalAtendimento.style.display = "block";
+  }
+};
+
+window.abrirAtendimento = function (id) {
+  const pedido = todosPedidos.find(p => p._id === id);
+
+  if (!pedido) {
+    alert("Pedido não encontrado.");
+    return;
+  }
+
+  const modal = document.getElementById("modalAtendimento");
+  const conteudo = document.getElementById("conteudoAtendimento");
+
+  if (!modal || !conteudo) {
+    alert("Modal de atendimento não encontrado no HTML.");
+    return;
+  }
+
+  conteudo.innerHTML = `
+    <p><strong>📋 Protocolo:</strong> ${pedido.protocolo || "Sem protocolo"}</p>
+    <p><strong>👤 Nome:</strong> ${pedido.nome || "Sem nome"}</p>
+    <p><strong>📞 Telefone:</strong> ${pedido.telefone || "Não informado"}</p>
+    <p><strong>📧 Email:</strong> ${pedido.email || "Não informado"}</p>
+
+    <p><strong>📍 Endereço:</strong>
+      ${pedido.logradouro || ""}, 
+      ${pedido.numero || ""}, 
+      ${pedido.bairro || ""}, 
+      ${pedido.cidade || ""} - 
+      ${pedido.estado || ""}
+    </p>
+
+    <hr>
+
+    <p><strong>Descrição:</strong></p>
+    <p>${pedido.descricao || "Sem descrição."}</p>
+
+    <hr>
+
+    <p><strong>📷 Fotos enviadas:</strong></p>
+
+    <div class="galeria-atendimento">
+      ${
+        pedido.fotos && Array.isArray(pedido.fotos) && pedido.fotos.length > 0
+          ? pedido.fotos.map(foto => `
+              <img
+                src="${foto}"
+                class="foto-atendimento"
+                onclick="abrirFoto('${foto}')"
+              >
+            `).join("")
+          : "<p>Nenhuma foto enviada.</p>"
+      }
+    </div>
+  `;
+
+  modal.style.display = "block";
+};
+
+window.fecharAtendimento = function () {
+  const modal = document.getElementById("modalAtendimento");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+};
+
 const campoBusca = document.getElementById("campoBusca");
 
 if (campoBusca) {
-  campoBusca.addEventListener("input", function () {
-    const texto = this.value.toLowerCase();
-
-    const pedidosFiltrados = todosPedidos.filter(pedido =>
-      (pedido.nome || "").toLowerCase().includes(texto) ||
-      (pedido.telefone || "").toLowerCase().includes(texto) ||
-      (pedido.email || "").toLowerCase().includes(texto)
-    );
-
-    montarCards(pedidosFiltrados);
-  });
+  campoBusca.addEventListener("input", aplicarFiltros);
 }
-
-carregarPedidos();
 
 const btnSair = document.getElementById("btnSair");
 
@@ -241,12 +393,4 @@ if (btnSair) {
   });
 }
 
-function abrirFoto(url) {
-  document.getElementById("fotoAmpliada").src = url;
-  document.getElementById("modalFoto").style.display = "flex";
-}
-
-function fecharFoto() {
-  document.getElementById("modalFoto").style.display = "none";
-  document.getElementById("fotoAmpliada").src = "";
-}
+carregarPedidos();
