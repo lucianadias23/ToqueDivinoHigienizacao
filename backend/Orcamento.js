@@ -20,6 +20,12 @@ const OrcamentoSchema = new mongoose.Schema({
     type: String,
     default: "Novo"
   },
+
+  observacoes: {
+    type: String,
+    default: ""
+},
+
   criadoEm: {
     type: Date,
     default: Date.now

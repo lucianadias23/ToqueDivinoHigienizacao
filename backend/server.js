@@ -159,6 +159,38 @@ app.put("/orcamentos/:id/status", async (req, res) => {
   }
 });
 
+app.put("/orcamentos/:id/observacoes", async (req, res) => {
+  try {
+    const { observacoes } = req.body;
+
+    const pedido = await Orcamento.findByIdAndUpdate(
+      req.params.id,
+      { observacoes },
+      { new: true }
+    );
+
+    if (!pedido) {
+      return res.status(404).json({
+        success: false,
+        erro: "Pedido não encontrado."
+      });
+    }
+
+    res.json({
+      success: true,
+      pedido
+    });
+
+  } catch (erro) {
+    console.error("Erro ao salvar observações:", erro);
+
+    res.status(500).json({
+      success: false,
+      erro: "Erro ao salvar observações."
+    });
+  }
+});
+
 // Excluir orçamento
 app.delete("/orcamentos/:id", async (req, res) => {
   try {
