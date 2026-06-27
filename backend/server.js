@@ -43,6 +43,12 @@ const Orcamento = mongoose.model("Orcamento", {
     type: String,
     default: "Novo"
   },
+
+  observacoes: {
+  type: String,
+  default: ""
+  },
+
   criadoEm: {
     type: Date,
     default: Date.now
