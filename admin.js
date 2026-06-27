@@ -432,46 +432,31 @@ if (btnSair) {
     window.location.href = "login.html";
   });
 }
-
 window.salvarObservacoes = async function (id) {
-
   const observacoes = document.getElementById("observacoes").value;
-  alert("Texto que estou enviando: " + observacoes);
 
-  try {
+  const resposta = await fetch(
+    `https://toquedivinohigienizacao.onrender.com/orcamentos/${id}/observacoes`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ observacoes })
+    }
+  );
 
-    const resposta = await fetch(
-      `https://toquedivinohigienizacao.onrender.com/orcamentos/${id}/observacoes`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ observacoes })
-      }
-    );
+  const dados = await resposta.json();
 
-    const dados = await resposta.json();
+  if (dados.success) {
+    const pedido = todosPedidos.find(p => p._id === id);
 
-    if (dados.success) {
-
-      const pedido = todosPedidos.find(p => p._id === id);
-
-      if (pedido) {
-        pedido.observacoes = observacoes;
-      }
-
-      alert("Observações salvas com sucesso!");
-
-    } else {
-      alert("Erro ao salvar observações.");
+    if (pedido) {
+      pedido.observacoes = observacoes;
     }
 
-  } catch (erro) {
-    console.error(erro);
+    alert("Observações salvas com sucesso!");
+  } else {
     alert("Erro ao salvar observações.");
   }
-
 };
 
 carregarPedidos();

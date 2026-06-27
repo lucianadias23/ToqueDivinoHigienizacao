@@ -163,15 +163,7 @@ app.put("/orcamentos/:id/observacoes", async (req, res) => {
   try {
     const { observacoes } = req.body;
 
-    console.log("Observações recebidas:", observacoes);
-    
-    const pedido = await Orcamento.findByIdAndUpdate(
-  req.params.id,
-  { observacoes },
-  { new: true }
-);
-
-console.log("Pedido atualizado:", JSON.stringify(pedido, null, 2));
+    const pedido = await Orcamento.findById(req.params.id);
 
     if (!pedido) {
       return res.status(404).json({
@@ -179,6 +171,9 @@ console.log("Pedido atualizado:", JSON.stringify(pedido, null, 2));
         erro: "Pedido não encontrado."
       });
     }
+
+    pedido.observacoes = observacoes;
+    await pedido.save();
 
     res.json({
       success: true,
