@@ -5,17 +5,22 @@ const OrcamentoSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
+
   nome: String,
   telefone: String,
   email: String,
+
   cep: String,
   logradouro: String,
   numero: String,
   bairro: String,
   cidade: String,
   estado: String,
+
   descricao: String,
+
   fotos: [String],
+
   status: {
     type: String,
     default: "Novo"
@@ -24,7 +29,7 @@ const OrcamentoSchema = new mongoose.Schema({
   observacoes: {
     type: String,
     default: ""
-},
+  },
 
   criadoEm: {
     type: Date,

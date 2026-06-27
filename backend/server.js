@@ -5,9 +5,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
 
-require("dotenv").config({
-  path: path.resolve(__dirname, "../.env")
-});
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+
+const Orcamento = require("./models/Orcamento");
 
 const app = express();
 
@@ -15,50 +15,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuração do Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 });
 
-// Modelo do orçamento
-const Orcamento = mongoose.model("Orcamento", {
-  protocolo: {
-    type: String,
-    unique: true
-  },
-  nome: String,
-  telefone: String,
-  email: String,
-  cep: String,
-  logradouro: String,
-  bairro: String,
-  cidade: String,
-  estado: String,
-  numero: String,
-  descricao: String,
-  fotos: [String],
-  status: {
-    type: String,
-    default: "Novo"
-  },
-
-  observacoes: {
-  type: String,
-  default: ""
-  },
-
-  criadoEm: {
-    type: Date,
-    default: Date.now
-  }
-});
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Enviar orçamento
 app.post(
   "/enviar",
   upload.fields([
@@ -74,52 +39,47 @@ app.post(
         ...(req.files?.foto || [])
       ];
 
-      if (arquivosFotos.length > 0) {
-        for (const arquivo of arquivosFotos) {
-          const b64 = Buffer.from(arquivo.buffer).toString("base64");
-          const dataURI = `data:${arquivo.mimetype};base64,${b64}`;
+      for (const arquivo of arquivosFotos) {
+        const b64 = Buffer.from(arquivo.buffer).toString("base64");
+        const dataURI = `data:${arquivo.mimetype};base64,${b64}`;
 
-          const result = await cloudinary.uploader.upload(dataURI, {
-            resource_type: "image"
-          });
+        const result = await cloudinary.uploader.upload(dataURI, {
+          resource_type: "image"
+        });
 
-          fotosUrls.push(result.secure_url);
-        }
+        fotosUrls.push(result.secure_url);
       }
 
       const quantidade = await Orcamento.countDocuments();
       const protocolo = `TD${String(quantidade + 1).padStart(6, "0")}`;
 
       const novoOrcamento = new Orcamento({
-        protocolo: protocolo,
+        protocolo,
         nome: req.body.nome,
         telefone: req.body.telefone,
         email: req.body.email,
         cep: req.body.cep,
         logradouro: req.body.logradouro,
+        numero: req.body.numero,
         bairro: req.body.bairro,
         cidade: req.body.cidade,
         estado: req.body.estado,
-        numero: req.body.numero,
         descricao: req.body.descricao,
         fotos: fotosUrls,
-        status: "Novo"
+        status: "Novo",
+        observacoes: ""
       });
-
-      console.log("Protocolo gerado:", protocolo);
-      console.log(novoOrcamento);
 
       await novoOrcamento.save();
 
-     res.json({
-     success: true,
-     mensagem: "VERSAO NOVA AGORA",
-     protocolo: protocolo
-    });
+      res.json({
+        success: true,
+        mensagem: "Orçamento enviado com sucesso!",
+        protocolo
+      });
 
     } catch (err) {
-      console.log("ERRO AO ENVIAR ORÇAMENTO:");
-      console.log(err.message);
+      console.error("Erro ao enviar orçamento:", err.message);
 
       res.status(500).json({
         success: false,
@@ -129,7 +89,6 @@ app.post(
   }
 );
 
-// Listar orçamentos
 app.get("/orcamentos", async (req, res) => {
   try {
     const orcamentos = await Orcamento.find().sort({ criadoEm: -1 });
@@ -142,6 +101,35 @@ app.get("/orcamentos", async (req, res) => {
   }
 });
 
+app.put("/orcamentos/:id/status", async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const pedido = await Orcamento.findByIdAndUpdate(
+      req.params.id,
+      { $set: { status } },
+      { new: true }
+    );
+
+    if (!pedido) {
+      return res.status(404).json({
+        success: false,
+        erro: "Pedido não encontrado."
+      });
+    }
+
+    res.json({
+      success: true,
+      pedido
+    });
+
+  } catch (erro) {
+    res.status(500).json({
+      success: false,
+      erro: "Erro ao atualizar status."
+    });
+  }
+});
 
 app.put("/orcamentos/:id/observacoes", async (req, res) => {
   try {
@@ -149,7 +137,7 @@ app.put("/orcamentos/:id/observacoes", async (req, res) => {
 
     const pedido = await Orcamento.findByIdAndUpdate(
       req.params.id,
-      { $set: { observacoes: observacoes } },
+      { $set: { observacoes } },
       { new: true }
     );
 
@@ -175,7 +163,6 @@ app.put("/orcamentos/:id/observacoes", async (req, res) => {
   }
 });
 
-// Excluir orçamento
 app.delete("/orcamentos/:id", async (req, res) => {
   try {
     const pedidoExcluido = await Orcamento.findByIdAndDelete(req.params.id);
@@ -183,7 +170,7 @@ app.delete("/orcamentos/:id", async (req, res) => {
     if (!pedidoExcluido) {
       return res.status(404).json({
         success: false,
-        erro: "Pedido não encontrado"
+        erro: "Pedido não encontrado."
       });
     }
 
@@ -211,8 +198,8 @@ async function iniciarServidor() {
     const PORT = process.env.PORT || 3000;
 
     app.listen(PORT, () => {
-     console.log(`Servidor rodando na porta ${PORT}`);
-});
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
 
   } catch (err) {
     console.log("Erro ao conectar MongoDB:", err.message);
