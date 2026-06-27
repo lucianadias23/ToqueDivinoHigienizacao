@@ -13,6 +13,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Configuração do Cloudinary
 cloudinary.config({
@@ -135,35 +136,16 @@ app.get("/orcamentos", async (req, res) => {
   }
 });
 
-// Atualizar status
-app.put("/orcamentos/:id/status", async (req, res) => {
-  try {
-    const { status } = req.body;
-
-    const orcamento = await Orcamento.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
-
-    res.json({
-      success: true,
-      orcamento
-    });
-
-  } catch (erro) {
-    res.status(500).json({
-      success: false,
-      erro: erro.message
-    });
-  }
-});
 
 app.put("/orcamentos/:id/observacoes", async (req, res) => {
   try {
-    const { observacoes } = req.body;
+    const observacoes = req.body.observacoes || "";
 
-    const pedido = await Orcamento.findById(req.params.id);
+    const pedido = await Orcamento.findByIdAndUpdate(
+      req.params.id,
+      { $set: { observacoes: observacoes } },
+      { new: true }
+    );
 
     if (!pedido) {
       return res.status(404).json({
@@ -171,9 +153,6 @@ app.put("/orcamentos/:id/observacoes", async (req, res) => {
         erro: "Pedido não encontrado."
       });
     }
-
-    pedido.observacoes = observacoes;
-    await pedido.save();
 
     res.json({
       success: true,
