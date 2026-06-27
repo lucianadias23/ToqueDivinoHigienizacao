@@ -166,10 +166,12 @@ app.put("/orcamentos/:id/observacoes", async (req, res) => {
     console.log("Observações recebidas:", observacoes);
     
     const pedido = await Orcamento.findByIdAndUpdate(
-      req.params.id,
-      { observacoes },
-      { new: true }
-    );
+  req.params.id,
+  { observacoes },
+  { new: true }
+);
+
+console.log("Pedido atualizado:", JSON.stringify(pedido, null, 2));
 
     if (!pedido) {
       return res.status(404).json({
