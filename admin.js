@@ -207,6 +207,7 @@ window.excluirPedido = async function (id) {
 
 window.enviarWhatsApp = function (id) {
   const pedido = todosPedidos.find(p => p._id === id);
+  alert("Observações atuais: " + pedido.observacoes);
 
   console.log(pedido);
 
@@ -345,10 +346,49 @@ window.abrirAtendimento = function (id) {
 
     <hr>
 
+
+
+
+<p><strong>🟢 Status do Pedido</strong></p>
+
+<div class="status-area">
+
+    <select
+    id="statusPedido"
+    onchange="alterarStatus('${pedido._id}', this.value)">
+        <option value="Novo" ${pedido.status==="Novo"?"selected":""}>Novo</option>
+        <option value="Em análise" ${pedido.status==="Em análise"?"selected":""}>Em análise</option>
+        <option value="Agendado" ${pedido.status==="Agendado"?"selected":""}>Agendado</option>
+        <option value="Finalizado" ${pedido.status==="Finalizado"?"selected":""}>Finalizado</option>
+        <option value="Cancelado" ${pedido.status==="Cancelado"?"selected":""}>Cancelado</option>
+    </select>
+
+  
+
+</div>
+
+<hr>
+
+
+
     <p><strong>Descrição:</strong></p>
     <p>${pedido.descricao || "Sem descrição."}</p>
 
     <hr>
+
+<p><strong>📝 Observações Internas</strong></p>
+
+<textarea
+    id="observacoes"
+    class="campo-observacoes"
+    placeholder="Digite aqui observações internas..."
+>${pedido.observacoes || ""}</textarea>
+
+<button
+    class="btn-observacoes"
+    onclick="salvarObservacoes('${pedido._id}')">
+    💾 Salvar Observações
+</button>
 
     <p><strong>📷 Fotos enviadas:</strong></p>
 
@@ -392,5 +432,46 @@ if (btnSair) {
     window.location.href = "login.html";
   });
 }
+
+window.salvarObservacoes = async function (id) {
+
+  const observacoes = document.getElementById("observacoes").value;
+  alert("Texto que estou enviando: " + observacoes);
+
+  try {
+
+    const resposta = await fetch(
+      `https://toquedivinohigienizacao.onrender.com/orcamentos/${id}/observacoes`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ observacoes })
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if (dados.success) {
+
+      const pedido = todosPedidos.find(p => p._id === id);
+
+      if (pedido) {
+        pedido.observacoes = observacoes;
+      }
+
+      alert("Observações salvas com sucesso!");
+
+    } else {
+      alert("Erro ao salvar observações.");
+    }
+
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao salvar observações.");
+  }
+
+};
 
 carregarPedidos();
