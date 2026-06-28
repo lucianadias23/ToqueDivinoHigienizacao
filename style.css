@@ -231,26 +231,6 @@ header{
     margin:0;
 }
 
-.beneficio-icone{
-    width:60px;
-    height:60px;
-    margin:0 auto 18px;
-    border-radius:50%;
-    background:#0b7895;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.12);
-}
-
-.beneficios-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
-    gap:25px;
-}
-
 /* QUEM SOMOS */
 .quem-somos-premium{
     max-width:1080px;
@@ -483,30 +463,65 @@ header{
 }
 
 /* BOTÃO FLUTUANTE */
-.orcamento-flutuante{
+.whatsapp-flutuante{
     position:fixed;
-    right:22px;
-    bottom:22px;
-    width:65px;
-    height:65px;
-    border:none;
-    border-radius:50%;
-    background:#0b7fa4;
-    color:white;
-    font-size:28px;
-    cursor:pointer;
+    right:20px;
+    bottom:20px;
+    z-index:9999;
+
     display:flex;
-    justify-content:center;
     align-items:center;
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-    z-index:1000;
+    gap:10px;
+
+    padding:14px 18px;
+
+    background:#25D366;
+    color:#fff;
+
+    border-radius:50px;
+    text-decoration:none;
+
+    font-size:16px;
+    font-weight:600;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.20);
+
     transition:.3s;
 }
 
-.orcamento-flutuante:hover{
-    transform:scale(1.08);
-    background:#075f7c;
+.whatsapp-flutuante:hover{
+    background:#1EBE5D;
+    transform:translateY(-3px);
 }
+
+.whatsapp-flutuante i{
+    font-size:24px;
+}
+
+@media(max-width:768px){
+
+    .whatsapp-flutuante{
+
+        width:60px;
+        height:60px;
+
+        padding:0;
+
+        justify-content:center;
+
+        border-radius:50%;
+    }
+
+    .whatsapp-flutuante span{
+        display:none;
+    }
+
+    .whatsapp-flutuante i{
+        font-size:30px;
+    }
+
+}
+
 
 /* RODAPÉ */
 footer{
@@ -1024,14 +1039,6 @@ footer{
     font-size:12px;
     line-height:1.5;
     padding:12px 20px;
-    }
-
-.orcamento-flutuante{
-    width:54px;
-    height:54px;
-    right:12px;
-    bottom:10px;
-    font-size:23px;
     }
 }
 

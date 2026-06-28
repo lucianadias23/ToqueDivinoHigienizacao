@@ -53,7 +53,7 @@ Descrição: ${formData.get("descricao")}
     const linkWhatsApp =
       `https://wa.me/${TELEFONE_EMPRESA}?text=${encodeURIComponent(mensagem)}`;
 
-    window.open(linkWhatsApp, "_blank");
+    
   }
 
   // =========================
