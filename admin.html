@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <meta charset="UTF-8">
   <title>Dashboard Administrador</title>
   <link rel="stylesheet" href="admin.css">
@@ -9,74 +10,41 @@
 
   <h1>Gestão de Pedidos</h1>
 
-<div id="contadores" class="contadores"></div>
-
-<input
-  type="text"
-  id="campoBusca"
-  placeholder="🔍 Buscar por nome, telefone ou e-mail..."
->
-
-<div id="listaPedidos"></div>
-
-  <script src="admin.js"></script>
-
   <button id="btnSair">
     Sair
-</button>
+  </button>
 
-<div id="modalFoto" style="
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(248,243,236,0.95);
-  z-index:9999;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-">
-  <button onclick="fecharFoto()" style="
-  margin-bottom:15px;
-  padding:10px 22px;
-  border:none;
-  border-radius:8px;
-  background:#0b7895;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-">
-  ← Voltar
-</button>
+  <div id="contadores" class="contadores"></div>
 
-  <img
-    id="fotoAmpliada"
-    style="
-      max-width:90%;
-      max-height:80%;
-      border-radius:10px;
-    "
+  <input
+    type="text"
+    id="campoBusca"
+    placeholder="🔍 Buscar por nome, telefone ou e-mail..."
   >
-</div>
 
-<!-- Modal Atendimento -->
-<div id="modalAtendimento" class="modal-atendimento">
-  <div class="modal-atendimento-conteudo">
-    <span class="fechar-atendimento" onclick="fecharAtendimento()">&times;</span>
+  <div id="listaPedidos"></div>
 
-    <h2>Atendimento</h2>
+  <!-- Modal Atendimento -->
+  <div id="modalAtendimento" class="modal-atendimento">
+    <div class="modal-atendimento-conteudo">
+      <span class="fechar-atendimento" onclick="fecharAtendimento()">&times;</span>
 
-    <div id="conteudoAtendimento"></div>
+      <h2>Atendimento</h2>
+
+      <div id="conteudoAtendimento"></div>
+    </div>
   </div>
-</div>
 
-<!-- Modal da Foto -->
-<div id="modalFoto" class="modal-foto">
-  <span class="fechar-foto" onclick="fecharFoto()">&times;</span>
-  <img id="fotoAmpliada" class="foto-ampliada">
-</div>
+  <!-- Modal Foto -->
+  <div id="modalFoto" class="modal-foto">
+    <button onclick="fecharFoto()" class="btn-voltar-foto">
+      ← Voltar
+    </button>
+
+    <img id="fotoAmpliada" class="foto-ampliada">
+  </div>
+
+  <script src="admin.js"></script>
 
 </body>
 </html>

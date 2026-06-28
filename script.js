@@ -1,51 +1,42 @@
-// Aguarda o HTML carregar antes de executar o JavaScript
 document.addEventListener("DOMContentLoaded", () => {
+  const API_URL = "https://toquedivinohigienizacao.onrender.com";
+  const TELEFONE_EMPRESA = "5511989671290";
 
   const formOrcamento = document.getElementById("formOrcamento");
   const cepInput = document.getElementById("cep");
+  const inputFotos = document.getElementById("fotos");
 
   // =========================
-  // ENVIO DO FORMULÁRIO
+  // MENU MOBILE
   // =========================
-if (formOrcamento) {
-  formOrcamento.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
-    const form = e.target;
-    const botao = form.querySelector("button[type='submit']");
-    const formData = new FormData(form);
+  window.abrirMenu = function () {
+    const menu = document.querySelector(".menu");
 
-    const inputFotos = document.getElementById("fotos");
+    if (menu) {
+      menu.classList.toggle("ativo");
+    }
+  };
 
+  // =========================
+  // VALIDAÇÃO DE FOTOS
+  // =========================
+
+  function validarQuantidadeFotos() {
     if (inputFotos && inputFotos.files.length > 5) {
       alert("Você pode enviar no máximo 5 fotos.");
-      return;
+      return false;
     }
 
-    botao.disabled = true;
-    botao.innerText = "Enviando...";
-
-    try {
-      const resposta = await fetch(
-      "https://toquedivinohigienizacao.onrender.com/enviar",
-  {
-    method: "POST",
-    body: formData
+    return true;
   }
-);
 
-      const dados = await resposta.json();
+  // =========================
+  // MENSAGEM PARA WHATSAPP
+  // =========================
 
-     
-
-      console.log("RESPOSTA DO BACKEND:", dados);
-
-      if (!dados.success) {
-        alert("Erro ao enviar: " + (dados.erro || "Erro desconhecido."));
-        return;
-      }
-
-      const mensagem = `Olá! Recebemos um novo orçamento.
+  function montarMensagemWhatsApp(formData) {
+    return `Olá! Recebemos um novo orçamento.
 
 Nome: ${formData.get("nome")}
 Telefone: ${formData.get("telefone")}
@@ -55,74 +46,121 @@ Bairro: ${formData.get("bairro")}
 Cidade: ${formData.get("cidade")} - ${formData.get("estado")}
 Descrição: ${formData.get("descricao")}
 `;
+  }
 
-      const telefoneEmpresa = "5511989671290";
-      const linkWhatsApp =
-        "https://wa.me/" + telefoneEmpresa + "?text=" + encodeURIComponent(mensagem);
+  function abrirWhatsAppEmpresa(formData) {
+    const mensagem = montarMensagemWhatsApp(formData);
+    const linkWhatsApp =
+      `https://wa.me/${TELEFONE_EMPRESA}?text=${encodeURIComponent(mensagem)}`;
 
-        alert(
-        `Orçamento enviado com sucesso!
+    window.open(linkWhatsApp, "_blank");
+  }
 
-        📋 Protocolo: ${dados.protocolo}
+  // =========================
+  // ENVIO DO FORMULÁRIO
+  // =========================
 
-        Guarde este número para acompanhar seu atendimento.
+  async function enviarFormulario(e) {
+    e.preventDefault();
 
-        Aguarde o nosso retorno, será um prazer atendê-lo!`
-        );
+    const form = e.target;
+    const botao = form.querySelector("button[type='submit']");
+    const formData = new FormData(form);
 
-      window.open(linkWhatsApp, "_blank");
+    if (!validarQuantidadeFotos()) return;
+
+    if (botao) {
+      botao.disabled = true;
+      botao.innerText = "Enviando...";
+    }
+
+    try {
+      const resposta = await fetch(`${API_URL}/enviar`, {
+        method: "POST",
+        body: formData
+      });
+
+      const dados = await resposta.json();
+
+      console.log("RESPOSTA DO BACKEND:", dados);
+
+      if (!dados.success) {
+        alert("Erro ao enviar: " + (dados.erro || "Erro desconhecido."));
+        return;
+      }
+
+      alert(`Orçamento enviado com sucesso!
+
+Protocolo: ${dados.protocolo}
+
+Guarde este número para acompanhar seu atendimento.
+
+Aguarde o nosso retorno, será um prazer atendê-lo!`);
+
+      abrirWhatsAppEmpresa(formData);
       form.reset();
 
       if (typeof fecharModal === "function") {
         fecharModal();
       }
-      
-       function abrirMenu() {
-    document.querySelector(".menu").classList.toggle("ativo");
-      }
-
 
     } catch (erro) {
       console.error("Erro no envio:", erro);
       alert("Erro no servidor.");
     } finally {
-      botao.disabled = false;
-      botao.innerText = "Enviar";
+      if (botao) {
+        botao.disabled = false;
+        botao.innerText = "Enviar";
+      }
     }
-  });
-}
+  }
+
+  if (formOrcamento) {
+    formOrcamento.addEventListener("submit", enviarFormulario);
+  }
 
   // =========================
   // API VIACEP
   // =========================
-  if (cepInput) {
-    cepInput.addEventListener("blur", async () => {
-      const cep = cepInput.value.replace(/\D/g, "");
 
-      if (cep.length !== 8) {
-        alert("Digite um CEP válido com 8 números.");
+  async function buscarEnderecoPorCep() {
+    const cep = cepInput.value.replace(/\D/g, "");
+
+    if (cep.length !== 8) {
+      alert("Digite um CEP válido com 8 números.");
+      return;
+    }
+
+    try {
+      const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const dados = await resposta.json();
+
+      if (dados.erro) {
+        alert("CEP não encontrado.");
         return;
       }
 
-      try {
-        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        const dados = await resposta.json();
+      preencherEndereco(dados);
 
-        if (dados.erro) {
-          alert("CEP não encontrado.");
-          return;
-        }
-
-        document.getElementById("logradouro").value = dados.logradouro || "";
-        document.getElementById("bairro").value = dados.bairro || "";
-        document.getElementById("cidade").value = dados.localidade || "";
-        document.getElementById("estado").value = dados.uf || "";
-
-      } catch (erro) {
-        console.error("Erro ViaCEP:", erro);
-        alert("Erro ao buscar o CEP. Tente novamente.");
-      }
-    });
+    } catch (erro) {
+      console.error("Erro ViaCEP:", erro);
+      alert("Erro ao buscar o CEP. Tente novamente.");
+    }
   }
 
+  function preencherEndereco(dados) {
+    const logradouro = document.getElementById("logradouro");
+    const bairro = document.getElementById("bairro");
+    const cidade = document.getElementById("cidade");
+    const estado = document.getElementById("estado");
+
+    if (logradouro) logradouro.value = dados.logradouro || "";
+    if (bairro) bairro.value = dados.bairro || "";
+    if (cidade) cidade.value = dados.localidade || "";
+    if (estado) estado.value = dados.uf || "";
+  }
+
+  if (cepInput) {
+    cepInput.addEventListener("blur", buscarEnderecoPorCep);
+  }
 });
