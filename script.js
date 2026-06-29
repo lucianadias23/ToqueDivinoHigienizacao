@@ -1,39 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "https://toquedivinohigienizacao.onrender.com";
+  const API_URL = "http://localhost:3000";
   const TELEFONE_EMPRESA = "5511989671290";
 
   const formOrcamento = document.getElementById("formOrcamento");
   const cepInput = document.getElementById("cep");
   const inputFotos = document.getElementById("fotos");
 
-  // =========================
-  // MENU MOBILE
-  // =========================
-
   window.abrirMenu = function () {
     const menu = document.querySelector(".menu");
-
-    if (menu) {
-      menu.classList.toggle("ativo");
-    }
+    if (menu) menu.classList.toggle("ativo");
   };
-
-  // =========================
-  // VALIDAÇÃO DE FOTOS
-  // =========================
 
   function validarQuantidadeFotos() {
     if (inputFotos && inputFotos.files.length > 5) {
       alert("Você pode enviar no máximo 5 fotos.");
       return false;
     }
-
     return true;
   }
-
-  // =========================
-  // MENSAGEM PARA WHATSAPP
-  // =========================
 
   function montarMensagemWhatsApp(formData) {
     return `Olá! Recebemos um novo orçamento.
@@ -53,12 +37,8 @@ Descrição: ${formData.get("descricao")}
     const linkWhatsApp =
       `https://wa.me/${TELEFONE_EMPRESA}?text=${encodeURIComponent(mensagem)}`;
 
-    
+    window.open(linkWhatsApp, "_blank");
   }
-
-  // =========================
-  // ENVIO DO FORMULÁRIO
-  // =========================
 
   async function enviarFormulario(e) {
     e.preventDefault();
@@ -75,6 +55,8 @@ Descrição: ${formData.get("descricao")}
     }
 
     try {
+      console.log("API_URL usada:", API_URL);
+
       const resposta = await fetch(`${API_URL}/enviar`, {
         method: "POST",
         body: formData
@@ -97,7 +79,7 @@ Guarde este número para acompanhar seu atendimento.
 
 Aguarde o nosso retorno, será um prazer atendê-lo!`);
 
-      abrirWhatsAppEmpresa(formData);
+      
       form.reset();
 
       if (typeof fecharModal === "function") {
@@ -118,10 +100,6 @@ Aguarde o nosso retorno, será um prazer atendê-lo!`);
   if (formOrcamento) {
     formOrcamento.addEventListener("submit", enviarFormulario);
   }
-
-  // =========================
-  // API VIACEP
-  // =========================
 
   async function buscarEnderecoPorCep() {
     const cep = cepInput.value.replace(/\D/g, "");
