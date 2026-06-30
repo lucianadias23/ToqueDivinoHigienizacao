@@ -101,14 +101,19 @@ app.post(
 
             <hr>
 
-            <p>
-             ${req.body.logradouro || ""}, ${req.body.numero || ""}<br>
-             ${req.body.complemento ? "Complemento: " + req.body.complemento + "<br>" : ""}
-             ${req.body.bairro || ""}<br>
-             ${req.body.cidade || ""} - ${req.body.estado || ""}<br>
-             CEP: ${req.body.cep || ""}
+           <h3>Endereço</h3>
 
-            </p>
+            <p><strong>Endereço:</strong> ${req.body.logradouro || ""}, ${req.body.numero || ""}</p>
+
+           ${req.body.complemento
+           ? `<p><strong>Complemento:</strong> ${req.body.complemento}</p>`
+            : ""}
+
+            <p><strong>Bairro:</strong> ${req.body.bairro || ""}</p>
+
+            <p><strong>Cidade:</strong> ${req.body.cidade || ""} - ${req.body.estado || ""}</p>
+
+            <p><strong>CEP:</strong> ${req.body.cep || ""}</p>
             
                        
             <hr>
