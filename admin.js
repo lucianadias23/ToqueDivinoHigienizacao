@@ -2,7 +2,7 @@ if (localStorage.getItem("adminLogado") !== "true") {
   window.location.href = "login.html";
 }
 
-const API_URL = "http://localhost:3000";
+const API_URL = "https://toquedivinohigienizacao.onrender.com";
 
 let todosPedidos = [];
 let statusAtual = "Todos";

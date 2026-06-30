@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "http://localhost:3000";
+  const API_URL = "https://toquedivinohigienizacao.onrender.com";
   const TELEFONE_EMPRESA = "5511989671290";
 
   const formOrcamento = document.getElementById("formOrcamento");
