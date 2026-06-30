@@ -72,6 +72,7 @@ app.post(
         cep: req.body.cep,
         logradouro: req.body.logradouro,
         numero: req.body.numero,
+        complemento: req.body.complemento,
         bairro: req.body.bairro,
         cidade: req.body.cidade,
         estado: req.body.estado,
@@ -100,14 +101,16 @@ app.post(
 
             <hr>
 
-            <p><strong>Endereço:</strong></p>
             <p>
-              ${req.body.logradouro || ""}, ${req.body.numero || ""}<br>
-              ${req.body.bairro || ""}<br>
-              ${req.body.cidade || ""} - ${req.body.estado || ""}<br>
-              CEP: ${req.body.cep || ""}
-            </p>
+             ${req.body.logradouro || ""}, ${req.body.numero || ""}<br>
+             ${req.body.complemento ? "Complemento: " + req.body.complemento + "<br>" : ""}
+             ${req.body.bairro || ""}<br>
+             ${req.body.cidade || ""} - ${req.body.estado || ""}<br>
+             CEP: ${req.body.cep || ""}
 
+            </p>
+            
+                       
             <hr>
 
             <p><strong>Descrição do serviço:</strong></p>

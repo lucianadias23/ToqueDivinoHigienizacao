@@ -294,12 +294,15 @@ window.abrirAtendimento = function (id) {
     <p><strong>Telefone:</strong> ${pedido.telefone || "Não informado"}</p>
     <p><strong>Email:</strong> ${pedido.email || "Não informado"}</p>
 
-    <p><strong>Endereço:</strong>
-      ${pedido.logradouro || ""}, 
-      ${pedido.numero || ""}, 
-      ${pedido.bairro || ""}, 
-      ${pedido.cidade || ""} - 
-      ${pedido.estado || ""}
+    <p><strong>Endereço:</strong><br>
+     ${pedido.logradouro || ""}, ${pedido.numero || ""}<br>
+
+     ${pedido.complemento
+     ? `<strong>Complemento:</strong> ${pedido.complemento}<br>`
+     : ""}
+
+     ${pedido.bairro || ""}<br>
+     ${pedido.cidade || ""} - ${pedido.estado || ""}
     </p>
 
     <hr>
