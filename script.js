@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "https://toquedivinohigienizacao.onrender.com";
+  const API_URL = "https://toquedivinohigienizacao.onrender.com"; // atualização netlify
   const TELEFONE_EMPRESA = "5511989671290";
 
   const formOrcamento = document.getElementById("formOrcamento");
