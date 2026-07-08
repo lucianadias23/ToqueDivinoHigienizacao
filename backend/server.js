@@ -85,7 +85,7 @@ app.post(
       await novoOrcamento.save();
 
       try {
-         await transporter.sendMail({
+         transporter.sendMail({
 
       
           from: `"Toque Divino Higienização" <${process.env.EMAIL_USER}>`,
